@@ -1,0 +1,23 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import joblib
+
+def train_and_save():
+    data = pd.read_csv("vgsales.csv")
+    data = data.dropna()
+    
+    x = data[["Rank", "NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales"]]
+    y = data["Global_Sales"]
+
+    xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.2, random_state=42)
+
+    model = LinearRegression()
+    model.fit(xtrain, ytrain)
+    
+    joblib.dump(model, 'vgsales_model.pkl')
+    
+    return data
+
+if __name__ == "__main__":
+    train_and_save()
